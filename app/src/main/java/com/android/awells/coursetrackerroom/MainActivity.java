@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -16,7 +17,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TermAdapter mTermAdapter;
+    private static final String TAG = MainActivity.class.getSimpleName();
+
     List<Term> mTerms;
 
     @Override
@@ -28,29 +30,74 @@ public class MainActivity extends AppCompatActivity {
         list.setLayoutManager(new LinearLayoutManager(list.getContext()));
 
         mTerms = CourseTrackerDatabase.getInstance(getApplicationContext()).term().selectAll();
-        mTermAdapter = new TermAdapter(mTerms);
-        list.setAdapter(mTermAdapter);
+
+        CourseAdapter courseAdapter = new CourseAdapter(mTerms);
+        courseAdapter.setOnItemClickListener(mOnItemClickListener());
+        list.setAdapter(courseAdapter);
     }
 
-    private static class TermAdapter extends RecyclerView.Adapter<TermAdapter.ViewHolder> {
+    public CourseAdapter.OnItemClickListener mOnItemClickListener() {
+        return new CourseAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+                Log.e(TAG, Integer.toString(position));
+            }
+        };
+    }
+    
+    static class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseHolder> {
+
+        public interface OnItemClickListener {
+            void onItemClick(View v, int position);
+        }
+
+        public class CourseHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+            TextView titleView;
+
+            public CourseHolder(View itemView) {
+                super(itemView);
+
+                titleView = itemView.findViewById(android.R.id.text1);
+
+                itemView.setOnClickListener(this);
+            }
+
+            @Override
+            public void onClick(View v) {
+                postItemClick(this);
+            }
+        }
 
         private List<Term> mTerms;
+        private OnItemClickListener mOnItemClickListener;
 
-        public TermAdapter(List<Term> terms) {
-            setTerms(terms);
-        }
-        //todo onItemClickListener
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new ViewHolder(parent);
+        public CourseAdapter(List<Term> terms) {
+            mTerms = terms;
         }
 
+        public void setOnItemClickListener(OnItemClickListener listener) {
+            mOnItemClickListener = listener;
+        }
+
+        private void postItemClick(CourseHolder holder) {
+            if (mOnItemClickListener != null) {
+                mOnItemClickListener.onItemClick(holder.itemView, holder.getAdapterPosition());
+            }
+        }
+
         @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
+        public CourseHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
+
+            return new CourseHolder(itemView);
+        }
+
+        @Override
+        public void onBindViewHolder(CourseHolder holder, int position) {
             String title = mTerms.get(position).getTitle();
 
-            holder.mText.setText(title);
+            holder.titleView.setText(title);
         }
 
         @Override
@@ -58,22 +105,9 @@ public class MainActivity extends AppCompatActivity {
             return mTerms.size();
         }
 
-        void setTerms(List<Term> terms) {
+        public void setTerms(List<Term> terms) {
             mTerms = terms;
             notifyDataSetChanged();
         }
-
-        static class ViewHolder extends RecyclerView.ViewHolder {
-
-            TextView mText;
-
-            ViewHolder(ViewGroup parent) {
-                super(LayoutInflater.from(parent.getContext()).inflate(
-                        android.R.layout.simple_list_item_1, parent, false));
-                mText = itemView.findViewById(android.R.id.text1); //todo make our own layout
-            }
-
-        }
-
     }
 }
