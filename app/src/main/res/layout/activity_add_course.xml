@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/add_course_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/course_title"/>
+
+    <TextView
+        android:id="@+id/add_course_start"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/start_date"/>
+
+    <TextView
+        android:id="@+id/add_course_end"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/end_date"/>
+
+    <Spinner
+        android:id="@+id/add_course_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/status_array"/>
+
+    <EditText
+        android:id="@+id/add_course_mentor_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/course_mentor_name"/>
+
+    <EditText
+        android:id="@+id/add_course_mentor_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/course_mentor_phone"
+        android:inputType="phone"/>
+
+    <EditText
+        android:id="@+id/add_course_mentor_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/course_mentor_email"
+        android:inputType="textEmailAddress"/>
+
+</LinearLayout>

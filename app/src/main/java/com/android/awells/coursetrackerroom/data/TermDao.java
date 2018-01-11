@@ -56,7 +56,7 @@ public interface TermDao {
      * @param id The row ID.
      * @return A number of terms deleted. This should always be {@code 1}.
      */
-    @Query("DELETE FROM " + Term.TABLE_NAME + " WHERE " + Term.COLUMN_ID + " = :id")
+    @Query("DELETE FROM " + Term.TABLE_NAME + " WHERE " + Term.COLUMN_ID + " = :id") //todo cascade delete
     int deleteById(long id);
 
     /**

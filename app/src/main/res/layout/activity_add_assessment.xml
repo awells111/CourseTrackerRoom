@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="vertical">
+
+    <Spinner
+        android:id="@+id/add_assessment_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/assessment_type"/>
+
+    <TextView
+        android:id="@+id/add_course_score"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Not Taken"/>
+
+    <TextView
+        android:id="@+id/add_assessment_scheduled_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Not Scheduled"/>
+
+    <TextView
+        android:id="@+id/add_assessment_notification_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Not Set"/>
+
+</LinearLayout>

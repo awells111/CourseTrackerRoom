@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--Todo a separate activity just for a note is bulky-->
+
+    <EditText
+        android:id="@+id/add_course_note"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:enabled="true"
+        android:minLines="6"
+        android:maxLines="6"
+        android:isScrollContainer="true"
+        android:focusable="true"
+        android:hint="@string/course_note"/>
+
+</android.support.constraint.ConstraintLayout>

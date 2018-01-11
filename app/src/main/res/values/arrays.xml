@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--Course status picker-->
+    <string-array name="status_array">
+        <item>@string/in_progress</item>
+        <item>@string/completed</item>
+        <item>@string/dropped</item>
+        <item>@string/plan_to_take</item>
+    </string-array>
+
+    <!--Add Assessment-->
+    <string-array name="assessment_type">
+        <item>@string/objective_assessment</item>
+        <item>@string/performance_assessment</item>
+    </string-array>
+
+</resources>
