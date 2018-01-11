@@ -5,6 +5,8 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
 import android.provider.BaseColumns;
+
+import static android.arch.persistence.room.ForeignKey.CASCADE;
 /**
  * Created by Owner on 1/11/2018.
  */
@@ -14,6 +16,8 @@ import android.provider.BaseColumns;
  */
 @Entity(tableName = Course.TABLE_NAME,
         foreignKeys = @ForeignKey(entity = Term.class,
+        onUpdate = CASCADE,
+        onDelete = CASCADE,
         parentColumns = Term.COLUMN_ID,
         childColumns = Course.COLUMN_TERM_ID))
 public class Course {
@@ -43,6 +47,13 @@ public class Course {
     @ColumnInfo(name = COLUMN_TERM_ID)
     private int termId;
 
+    public Course() {}
+
+    public Course(String title, int termId) {
+        this.title = title;
+        this.termId = termId;
+    }
+
     public long getId() {
         return id;
     }
@@ -69,6 +80,6 @@ public class Course {
 
     /** Dummy data. */
     static final String[] COURSES = {
-            "C768", "C773", "C188", "C179", "C195"
+            "C768", "C773", "C188", "C179", "C195", "C193"
     };
 }

@@ -36,8 +36,7 @@ public class Term {
     public Term() {}
 
     /** Constructor for the term. */
-    public Term(long id, String title) {
-        this.id = id;
+    public Term(String title) {
         this.title = title;
     }
 
@@ -57,10 +56,17 @@ public class Term {
         this.title = title;
     }
 
+    @Override
+    public String toString() {
+        return "Term{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                '}';
+    }
 
     /** Dummy data. */
     static final String[] TERMS = {
-            "Term 1", "Term 2", "Term 3", "Term 4", "Term 5"
+            "Term 0", "Term 1", "Term 2", "Term 3", "Term 4"
     };
 
 }
