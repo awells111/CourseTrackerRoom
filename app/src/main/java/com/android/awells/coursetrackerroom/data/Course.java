@@ -78,6 +78,15 @@ public class Course {
         this.termId = termId;
     }
 
+    @Override
+    public String toString() {
+        return "Course{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", termId=" + termId +
+                '}';
+    }
+
     /** Dummy data. */
     static final String[] COURSES = {
             "C768", "C773", "C188", "C179", "C195", "C193"

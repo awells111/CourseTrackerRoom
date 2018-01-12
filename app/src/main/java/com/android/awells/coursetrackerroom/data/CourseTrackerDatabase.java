@@ -70,7 +70,7 @@ public abstract class CourseTrackerDatabase extends RoomDatabase{
                     term().insert(term);
                 }
 
-                //Add 6 courses that reference previously added terms
+                //Add 10 courses that reference previously added terms
                 for (int i = 0; i < Term.TERMS.length; i++) {
                     Course course1 = new Course();
                     course1.setTitle(Course.COURSES[i]);

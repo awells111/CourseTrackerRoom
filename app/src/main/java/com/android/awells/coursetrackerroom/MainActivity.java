@@ -1,10 +1,10 @@
 package com.android.awells.coursetrackerroom;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,39 +26,42 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final RecyclerView list = findViewById(R.id.list);
-        list.setLayoutManager(new LinearLayoutManager(list.getContext()));
-
         mTerms = CourseTrackerDatabase.getInstance(getApplicationContext()).term().selectAll();
 
-        CourseAdapter courseAdapter = new CourseAdapter(mTerms);
-        courseAdapter.setOnItemClickListener(mOnItemClickListener());
-        list.setAdapter(courseAdapter);
+        final RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+
+        TermAdapter termAdapter = new TermAdapter(mTerms);
+        termAdapter.setOnItemClickListener(mOnItemClickListener());
+        recyclerView.setAdapter(termAdapter);
     }
 
-    public CourseAdapter.OnItemClickListener mOnItemClickListener() {
-        return new CourseAdapter.OnItemClickListener() {
+    public TermAdapter.OnItemClickListener mOnItemClickListener() {
+        return new TermAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                Log.e(TAG, Integer.toString(position));
+                Intent intent = new Intent(MainActivity.this, TermDetailActivity.class);
+                intent.putExtra(Term.COLUMN_ID, mTerms.get(position).getId());
+
+                startActivity(intent);
             }
         };
     }
-    
-    static class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseHolder> {
+
+    static class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermHolder> {
 
         public interface OnItemClickListener {
             void onItemClick(View v, int position);
         }
 
-        public class CourseHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        public class TermHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
             TextView titleView;
 
-            public CourseHolder(View itemView) {
+            public TermHolder(View itemView) {
                 super(itemView);
 
-                titleView = itemView.findViewById(android.R.id.text1);
+                titleView = itemView.findViewById(R.id.term_title_list);
 
                 itemView.setOnClickListener(this);
             }
@@ -72,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         private List<Term> mTerms;
         private OnItemClickListener mOnItemClickListener;
 
-        public CourseAdapter(List<Term> terms) {
+        public TermAdapter(List<Term> terms) {
             mTerms = terms;
         }
 
@@ -80,21 +83,21 @@ public class MainActivity extends AppCompatActivity {
             mOnItemClickListener = listener;
         }
 
-        private void postItemClick(CourseHolder holder) {
+        private void postItemClick(TermHolder holder) {
             if (mOnItemClickListener != null) {
                 mOnItemClickListener.onItemClick(holder.itemView, holder.getAdapterPosition());
             }
         }
 
         @Override
-        public CourseHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
+        public TermHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_term, parent, false);
 
-            return new CourseHolder(itemView);
+            return new TermHolder(itemView);
         }
 
         @Override
-        public void onBindViewHolder(CourseHolder holder, int position) {
+        public void onBindViewHolder(TermHolder holder, int position) {
             String title = mTerms.get(position).getTitle();
 
             holder.titleView.setText(title);

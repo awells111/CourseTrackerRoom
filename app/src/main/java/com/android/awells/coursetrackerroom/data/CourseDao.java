@@ -20,15 +20,6 @@ public interface CourseDao {
      * Inserts a course into the table.
      *
      * @param course A new course.
-     * @return The row ID of the newly inserted course. todo check this
-     */
-    @Insert
-    long insert(Term term);
-
-    /**
-     * Inserts a course into the table.
-     *
-     * @param course A new course.
      * @return The row ID of the newly inserted course.
      */
     @Insert
