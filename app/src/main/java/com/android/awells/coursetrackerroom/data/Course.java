@@ -46,7 +46,7 @@ public class Course {
     public static final String COLUMN_END_NOTIFICATION = "end_notification";
 
     /** The name of the course_mentor column. */
-    public static final String COLUMN_COURSE_MENTOR = "course_mentor";
+    public static final String PREFIX_COURSE_MENTOR = "mentor_";
 
     /** The unique ID of the parent term */
     @ColumnInfo(index = true, name = COLUMN_TERM_ID)
@@ -73,9 +73,9 @@ public class Course {
     @ColumnInfo(name = COLUMN_END_NOTIFICATION)
     private long endNotification = Long.MIN_VALUE;
 
-    /** The course mentor of the course. */
-    @Embedded
-    @ColumnInfo(name = COLUMN_COURSE_MENTOR)
+    /** The course mentor of the course.
+     * Embedded columns will be listed as mentor_name, mentor_phone_number, mentor_email*/
+    @Embedded(prefix = PREFIX_COURSE_MENTOR)
     private CourseMentor courseMentor;
 
     //<editor-fold defaultstate="collapsed" desc="Getters and Setters">

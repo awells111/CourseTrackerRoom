@@ -12,7 +12,7 @@ import android.support.annotation.VisibleForTesting;
 /**
  * The Room database.
  */
-@Database(entities = {Term.class, Course.class}, version = 1)
+@Database(entities = {Term.class, Course.class, Note.class, Assessment.class}, version = 1)
 public abstract class CourseTrackerDatabase extends RoomDatabase {
 
     /**
