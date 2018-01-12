@@ -36,6 +36,8 @@
     <string name="error_end_date">Please Select An End Date</string>
     <string name="start_date_colon">Start Date: </string>
     <string name="end_date_colon">End Date: </string>
+    <string name="term_start_date_colon">Term Start Date: </string>
+    <string name="term_end_date_colon">Term End Date: </string>
     <string name="course_mentor_name">Course Mentor Name</string>
     <string name="course_mentor_phone">Course Mentor Phone</string>
     <string name="course_mentor_email">Course Mentor Email</string>
@@ -49,8 +51,8 @@
     <string name="test_score">Test Score: </string>
     <string name="scheduled_time">Scheduled Time: </string>
     <string name="notification_time">Notification Time: </string>
-    <string name="objective_assessment">Objective Assessment</string>
-    <string name="performance_assessment">Performance Assessment</string>
+    <string name="objective_assessment">Objective</string>
+    <string name="performance_assessment">Performance</string>
     <string name="title_activity_add_note">AddNoteActivity</string>
 
 </resources>

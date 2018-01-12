@@ -13,7 +13,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/start_date_colon"/>
+            android:text="@string/term_start_date_colon"/>
 
         <TextView
             android:id="@+id/term_start_date_detail"
@@ -29,7 +29,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/end_date_colon"/>
+            android:text="@string/term_end_date_colon"/>
 
         <TextView
             android:id="@+id/term_end_date_detail"

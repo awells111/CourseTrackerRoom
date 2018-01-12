@@ -23,15 +23,7 @@
             android:textSize="18sp"
             android:textStyle="bold"
             tools:text="Term 1"/>
-
-        <TextView
-            android:id="@+id/term_description_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="2"
-            tools:text="The term description goes here. It will be cut off if it gets longer than two lines so here is some sample text that should demonstrate that capability"/>
-
+        
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

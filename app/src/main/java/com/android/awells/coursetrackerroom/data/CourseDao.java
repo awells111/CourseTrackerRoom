@@ -11,7 +11,7 @@ import android.arch.persistence.room.Update;
 
 import java.util.List;
 /**
- * Data access object for Term.
+ * Data access object for Course.
  */
 @Dao
 public interface CourseDao {
@@ -49,7 +49,7 @@ public interface CourseDao {
      * @param id The row ID.
      * @return A number of courses deleted. This should always be {@code 1}.
      */
-    @Query("DELETE FROM " + Course.TABLE_NAME + " WHERE " + Course.COLUMN_ID + " = :id") //todo cascade delete
+    @Query("DELETE FROM " + Course.TABLE_NAME + " WHERE " + Course.COLUMN_ID + " = :id")
     int deleteById(long id);
 
     /**

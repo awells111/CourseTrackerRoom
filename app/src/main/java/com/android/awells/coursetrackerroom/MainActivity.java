@@ -15,6 +15,8 @@ import com.android.awells.coursetrackerroom.data.Term;
 
 import java.util.List;
 
+import static com.android.awells.coursetrackerroom.DatePickerFragment.formatMyTime;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -57,11 +59,15 @@ public class MainActivity extends AppCompatActivity {
         public class TermHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
             TextView titleView;
+            TextView startDateView;
+            TextView endDateView;
 
             public TermHolder(View itemView) {
                 super(itemView);
 
                 titleView = itemView.findViewById(R.id.term_title_list);
+                startDateView = itemView.findViewById(R.id.term_start_date);
+                endDateView = itemView.findViewById(R.id.term_end_date);
 
                 itemView.setOnClickListener(this);
             }
@@ -98,9 +104,15 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(TermHolder holder, int position) {
-            String title = mTerms.get(position).getTitle();
+            Term term = mTerms.get(position);
+
+            String title = term.getTitle();
+            String startDate = formatMyTime(term.getStartDate());
+            String endDate = formatMyTime(term.getEndDate());
 
             holder.titleView.setText(title);
+            holder.startDateView.setText(startDate);
+            holder.endDateView.setText(endDate);
         }
 
         @Override
