@@ -6,8 +6,6 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
 import android.provider.BaseColumns;
 
-import com.android.awells.coursetrackerroom.R;
-
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 /**
  * Created by Owner on 1/12/2018.

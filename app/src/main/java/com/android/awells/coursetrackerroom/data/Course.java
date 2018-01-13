@@ -5,7 +5,6 @@ import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
-import android.location.Address;
 import android.provider.BaseColumns;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
@@ -39,11 +38,11 @@ public class Course {
     /** The name of the status column. */
     public static final String COLUMN_STATUS = "status";
 
-    /** The name of the start_notification column. */
-    public static final String COLUMN_START_NOTIFICATION = "start_notification";
+    /** The name of the start_date column. */
+    public static final String COLUMN_START_DATE = "start_date";
 
-    /** The name of the end_notification column. */
-    public static final String COLUMN_END_NOTIFICATION = "end_notification";
+    /** The name of the end_date column. */
+    public static final String COLUMN_END_DATE = "end_date";
 
     /** The name of the course_mentor column. */
     public static final String PREFIX_COURSE_MENTOR = "mentor_";
@@ -65,13 +64,13 @@ public class Course {
     @ColumnInfo(name = COLUMN_STATUS)
     private String status;
 
-    /** The start notification time of the course. */
-    @ColumnInfo(name = COLUMN_START_NOTIFICATION)
-    private long startNotification = Long.MIN_VALUE;
+    /** The start date of the course. */
+    @ColumnInfo(name = COLUMN_START_DATE)
+    private long startDate = Long.MIN_VALUE;
 
-    /** The end notification time of the course. */
-    @ColumnInfo(name = COLUMN_END_NOTIFICATION)
-    private long endNotification = Long.MIN_VALUE;
+    /** The end date of the course. */
+    @ColumnInfo(name = COLUMN_END_DATE)
+    private long endDate = Long.MIN_VALUE;
 
     /** The course mentor of the course.
      * Embedded columns will be listed as mentor_name, mentor_phone_number, mentor_email*/
@@ -111,20 +110,20 @@ public class Course {
         this.status = status;
     }
 
-    public long getStartNotification() {
-        return startNotification;
+    public long getStartDate() {
+        return startDate;
     }
 
-    public void setStartNotification(long startNotification) {
-        this.startNotification = startNotification;
+    public void setStartDate(long startDate) {
+        this.startDate = startDate;
     }
 
-    public long getEndNotification() {
-        return endNotification;
+    public long getEndDate() {
+        return endDate;
     }
 
-    public void setEndNotification(long endNotification) {
-        this.endNotification = endNotification;
+    public void setEndDate(long endDate) {
+        this.endDate = endDate;
     }
 
     public CourseMentor getCourseMentor() {
@@ -143,8 +142,8 @@ public class Course {
                 ", id=" + id +
                 ", title='" + title + '\'' +
                 ", status='" + status + '\'' +
-                ", startNotification=" + startNotification +
-                ", endNotification=" + endNotification +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
                 ", courseMentor=" + courseMentor +
                 '}';
     }
@@ -158,8 +157,8 @@ public class Course {
 
         if (getTermId() != course.getTermId()) return false;
         if (getId() != course.getId()) return false;
-        if (getStartNotification() != course.getStartNotification()) return false;
-        if (getEndNotification() != course.getEndNotification()) return false;
+        if (getStartDate() != course.getStartDate()) return false;
+        if (getEndDate() != course.getEndDate()) return false;
         if (getTitle() != null ? !getTitle().equals(course.getTitle()) : course.getTitle() != null)
             return false;
         if (getStatus() != null ? !getStatus().equals(course.getStatus()) : course.getStatus() != null)
@@ -173,8 +172,8 @@ public class Course {
         result = 31 * result + (int) (getId() ^ (getId() >>> 32));
         result = 31 * result + (getTitle() != null ? getTitle().hashCode() : 0);
         result = 31 * result + (getStatus() != null ? getStatus().hashCode() : 0);
-        result = 31 * result + (int) (getStartNotification() ^ (getStartNotification() >>> 32));
-        result = 31 * result + (int) (getEndNotification() ^ (getEndNotification() >>> 32));
+        result = 31 * result + (int) (getStartDate() ^ (getStartDate() >>> 32));
+        result = 31 * result + (int) (getEndDate() ^ (getEndDate() >>> 32));
         result = 31 * result + (getCourseMentor() != null ? getCourseMentor().hashCode() : 0);
         return result;
     }
@@ -186,69 +185,3 @@ public class Course {
     };
 }
 
-class CourseMentor {
-
-    private String name;
-
-    @ColumnInfo(name = "phone_number")
-    private String phoneNumber;
-    private String email;
-
-    //<editor-fold defaultstate="collapsed" desc="Getters and Setters">
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    //</editor-fold>
-    //<editor-fold defaultstate="collapsed" desc="equals hashCode and toString">
-    @Override
-    public String toString() {
-        return "CourseMentor{" +
-                "name='" + name + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", email='" + email + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        CourseMentor that = (CourseMentor) o;
-
-        if (getName() != null ? !getName().equals(that.getName()) : that.getName() != null)
-            return false;
-        if (getPhoneNumber() != null ? !getPhoneNumber().equals(that.getPhoneNumber()) : that.getPhoneNumber() != null)
-            return false;
-        return getEmail() != null ? getEmail().equals(that.getEmail()) : that.getEmail() == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = getName() != null ? getName().hashCode() : 0;
-        result = 31 * result + (getPhoneNumber() != null ? getPhoneNumber().hashCode() : 0);
-        result = 31 * result + (getEmail() != null ? getEmail().hashCode() : 0);
-        return result;
-    }
-    //</editor-fold>
-}

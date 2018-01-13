@@ -4,8 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--Todo a separate activity just for a note is bulky-->
-
     <EditText
         android:id="@+id/add_course_note"
         android:layout_width="match_parent"

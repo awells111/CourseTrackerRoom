@@ -17,15 +17,37 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".AddTermActivity"
+            android:label="@string/add_term"
+            android:launchMode="singleTop"
+            android:parentActivityName=".MainActivity"
+            />
+        <activity
             android:name=".TermDetailActivity"
-            android:configChanges="orientation|screenSize"
-            android:exported="false"
             android:parentActivityName=".MainActivity"/>
         <activity
+            android:name=".AddCourseActivity"
+            android:label="@string/add_course"
+            android:launchMode="singleTop"
+            android:parentActivityName=".TermDetailActivity"
+            />
+        <activity
             android:name=".CourseDetailActivity"
-            android:configChanges="orientation|screenSize"
-            android:exported="false"
             android:parentActivityName=".TermDetailActivity"/>
+
+        <activity
+            android:name=".AddNoteActivity"
+            android:label="@string/add_note"
+            android:launchMode="singleTop"
+            android:parentActivityName=".CourseDetailActivity"
+            />
+
+        <activity
+            android:name=".AddAssessmentActivity"
+            android:label="@string/add_assessment"
+            android:launchMode="singleTop"
+            android:parentActivityName=".CourseDetailActivity"
+            />
     </application>
 
 </manifest>

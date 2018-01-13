@@ -1,14 +1,20 @@
 package com.android.awells.coursetrackerroom;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.awells.coursetrackerroom.data.Course;
 import com.android.awells.coursetrackerroom.data.CourseTrackerDatabase;
@@ -30,11 +36,25 @@ public class TermDetailActivity extends AppCompatActivity {
 
         termId = getIntent().getLongExtra(Term.COLUMN_ID, -1); // Retrieve the term's ID from the intent
         this.setTitle(CourseTrackerDatabase.getInstance(getApplicationContext()).term().selectById(termId).getTitle()); //Set the title by retrieving the term
-        mCourses = CourseTrackerDatabase.getInstance(getApplicationContext()).course().selectCoursesFromTerm(termId); //Retrieve the list of courses from the database
 
+        updateUI();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // If a course was changed or deleted
+        if (resultCode == RESULT_OK) {
+            updateUI();
+        }
+    }
+
+    private void updateUI() {
         final RecyclerView recyclerView = findViewById(R.id.recycler_view_term_detail);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
 
+        mCourses = CourseTrackerDatabase.getInstance(getApplicationContext()).course().selectCoursesFromTerm(termId); //Retrieve the list of courses from the database
         CourseAdapter courseAdapter = new CourseAdapter(mCourses);
         courseAdapter.setOnItemClickListener(mOnItemClickListener());
         recyclerView.setAdapter(courseAdapter);
@@ -47,9 +67,61 @@ public class TermDetailActivity extends AppCompatActivity {
                 Intent intent = new Intent(TermDetailActivity.this, CourseDetailActivity.class);
                 intent.putExtra(Course.COLUMN_ID, mCourses.get(position).getId());
 
-                startActivity(intent);
+                startActivityForResult(intent, 1);
             }
         };
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_term_detail, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.action_add_course:
+                Intent intent = new Intent(this, AddTermActivity.class);
+                startActivityForResult(intent, 1);
+                return true;
+            case R.id.action_delete_term:
+                showDeleteDialog();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+    private void showDeleteDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(TermDetailActivity.this);
+
+        builder.setMessage(getText(R.string.delete_term_confirmation))
+                .setPositiveButton(getText(R.string.yes), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        if (mCourses.size() == 0) { //if the term has no courses
+                            int count = CourseTrackerDatabase.getInstance(getApplicationContext()).term().deleteById(termId);
+                            Log.d(TAG, "Deleted " + count + " term(s)");
+                            setResult(RESULT_OK, null); // Let MainActivity know it needs to update the UI
+                            finish();
+                        } else { //else if the term still has courses
+                            Toast.makeText(TermDetailActivity.this, getString(R.string.delete_courses_first), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .setNegativeButton(getText(R.string.no), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                })
+                .show();
     }
 
     static class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseHolder> {

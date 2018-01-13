@@ -5,7 +5,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -19,8 +22,6 @@ import static com.android.awells.coursetrackerroom.DatePickerFragment.formatMyTi
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
-
     List<Term> mTerms;
 
     @Override
@@ -28,11 +29,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mTerms = CourseTrackerDatabase.getInstance(getApplicationContext()).term().selectAll();
+        updateUI();
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // If a term was changed or deleted
+        if (resultCode == RESULT_OK) {
+            updateUI();
+        }
+    }
+
+    private void updateUI() {
         final RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
 
+        mTerms = CourseTrackerDatabase.getInstance(getApplicationContext()).term().selectAll();
         TermAdapter termAdapter = new TermAdapter(mTerms);
         termAdapter.setOnItemClickListener(mOnItemClickListener());
         recyclerView.setAdapter(termAdapter);
@@ -45,9 +59,29 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, TermDetailActivity.class);
                 intent.putExtra(Term.COLUMN_ID, mTerms.get(position).getId());
 
-                startActivity(intent);
+                startActivityForResult(intent, 1);
             }
         };
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_add_term:
+                Intent intent = new Intent(this, AddTermActivity.class);
+                startActivityForResult(intent, 1);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
     }
 
     static class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermHolder> {

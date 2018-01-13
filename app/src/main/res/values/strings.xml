@@ -55,4 +55,7 @@
     <string name="performance_assessment">Performance</string>
     <string name="title_activity_add_note">AddNoteActivity</string>
 
+    <!--Error Messages-->
+    <string name="enter_valid_data">Please set all fields</string>
+
 </resources>
