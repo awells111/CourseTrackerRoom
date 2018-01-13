@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -102,8 +101,8 @@ public class MainActivity extends AppCompatActivity {
                 super(itemView);
 
                 titleView = itemView.findViewById(R.id.term_title_list);
-                startDateView = itemView.findViewById(R.id.term_start_date);
-                endDateView = itemView.findViewById(R.id.term_end_date);
+                startDateView = itemView.findViewById(R.id.term_start_date_list);
+                endDateView = itemView.findViewById(R.id.term_end_date_list);
 
                 itemView.setOnClickListener(this);
             }

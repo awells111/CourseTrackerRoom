@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/note_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="You miss 100% of the shots you don't take - Wayne Gretzky"/>
+</android.support.constraint.ConstraintLayout>

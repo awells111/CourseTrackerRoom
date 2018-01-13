@@ -22,6 +22,7 @@ import com.android.awells.coursetrackerroom.data.Term;
 
 import java.util.List;
 
+import static com.android.awells.coursetrackerroom.DatePickerFragment.formatMyTime;
 import static com.android.awells.coursetrackerroom.MainActivity.CODE_NO_INPUT;
 
 public class TermDetailActivity extends AppCompatActivity {
@@ -37,7 +38,6 @@ public class TermDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_term_detail);
 
         termId = getIntent().getLongExtra(Term.COLUMN_ID, CODE_NO_INPUT); // Retrieve the term's ID from the intent
-        this.setTitle(CourseTrackerDatabase.getInstance(getApplicationContext()).term().selectById(termId).getTitle()); //Set the title by retrieving the term
 
         updateUI();
     }
@@ -53,6 +53,15 @@ public class TermDetailActivity extends AppCompatActivity {
     }
 
     private void updateUI() {
+        Term term = CourseTrackerDatabase.getInstance(getApplicationContext()).term().selectById(termId);
+        this.setTitle(term.getTitle());
+
+        TextView startDateView = findViewById(R.id.term_start_date_detail);
+        TextView endDateView = findViewById(R.id.term_end_date_detail);
+
+        startDateView.setText(formatMyTime(term.getStartDate()));
+        endDateView.setText(formatMyTime(term.getEndDate()));
+
         final RecyclerView recyclerView = findViewById(R.id.recycler_view_term_detail);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
 

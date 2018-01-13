@@ -48,12 +48,16 @@
     <string name="plan_to_take">Plan To Take</string>
 
     <!--Assessment-->
+    <string name="assessments_colon">Assessments: </string>
     <string name="test_score">Test Score: </string>
     <string name="scheduled_time">Scheduled Time: </string>
     <string name="notification_time">Notification Time: </string>
     <string name="objective_assessment">Objective</string>
     <string name="performance_assessment">Performance</string>
     <string name="title_activity_add_note">AddNoteActivity</string>
+
+    <!--Note-->
+    <string name="notes_colon">Notes: </string>
 
     <!--Error Messages-->
     <string name="enter_valid_data">Please set all fields</string>
