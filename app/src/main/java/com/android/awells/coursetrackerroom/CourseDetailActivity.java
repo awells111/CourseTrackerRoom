@@ -30,6 +30,8 @@ public class CourseDetailActivity extends AppCompatActivity {
     private static String TAG = CourseDetailActivity.class.getSimpleName();
 
     private long courseId;
+    private long termId;
+
     private List<Assessment> mAssessments;
     private List<Note> mNotes;
 
@@ -39,6 +41,8 @@ public class CourseDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_course_detail);
 
         courseId = getIntent().getLongExtra(Course.COLUMN_ID, CODE_NO_INPUT);
+        termId = getIntent().getLongExtra(Term.COLUMN_ID, CODE_NO_INPUT);
+
         this.setTitle(CourseTrackerDatabase.getInstance(getApplicationContext()).course().selectByCourseId(courseId).getTitle()); //Set the title by retrieving the term
 
         updateUI();
@@ -106,6 +110,18 @@ public class CourseDetailActivity extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 return true;
+            case R.id.action_edit_course:
+                Intent editIntent = new Intent(CourseDetailActivity.this, AddCourseActivity.class);
+                editIntent.putExtra(Term.COLUMN_ID, termId);
+                editIntent.putExtra(Course.COLUMN_ID, courseId);
+                startActivityForResult(editIntent, 1);
+                return true;
+            case R.id.action_delete_course:
+                int count = CourseTrackerDatabase.getInstance(getApplicationContext()).course().deleteById(courseId);
+                Log.d(TAG, "Deleted " + count + " course(s)");
+                setResult(RESULT_OK, null); // Let TermDetailActivity know it needs to update the UI
+                finish();
+                return true;
             case R.id.action_add_assessment:
                 Intent assessmentIntent = new Intent(CourseDetailActivity.this, AddAssessmentActivity.class);
                 assessmentIntent.putExtra(Course.COLUMN_ID, courseId);
@@ -117,14 +133,13 @@ public class CourseDetailActivity extends AppCompatActivity {
                 startActivityForResult(noteIntent, 1);
                 return true;
             case R.id.action_share_notes:
-
                 //Create one String made from every note in mNotes
                 StringBuilder sb = new StringBuilder();
                 for (Note n : mNotes) { //For each note in mNotes
                     sb.append(n.getText()); //Add the note text to the StringBuilder
                     sb.append("\n"); //Move to a new line
                 }
-                
+
                 //Send the String to an email app
                 Intent shareIntent = new Intent(Intent.ACTION_VIEW);
                 Uri data = Uri.parse("mailto:?subject=" + this.getTitle() + " " + getString(R.string.notes) +  "&body=" + sb.toString());

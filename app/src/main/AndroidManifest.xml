@@ -27,7 +27,7 @@
             android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".AddCourseActivity"
-            android:label="@string/add_course"
+            android:label="@string/edit_course"
             android:launchMode="singleTop"
             android:parentActivityName=".TermDetailActivity"
             />

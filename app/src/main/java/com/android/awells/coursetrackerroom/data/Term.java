@@ -18,7 +18,7 @@ public class Term {
     public static final String TABLE_NAME = "terms";
 
     /** The name of the ID column. */
-    public static final String COLUMN_ID = BaseColumns._ID;
+    public static final String COLUMN_ID = TABLE_NAME + BaseColumns._ID;
 
     /** The name of the title column. */
     public static final String COLUMN_TITLE = "title";

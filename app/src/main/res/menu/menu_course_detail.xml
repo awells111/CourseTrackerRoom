@@ -14,4 +14,12 @@
         android:id="@+id/action_share_notes"
         android:title="@string/share_notes"/>
 
+    <item
+        android:id="@+id/action_edit_course"
+        android:title="@string/edit_course"/>
+
+    <item
+        android:id="@+id/action_delete_course"
+        android:title="@string/delete_course"/>
+
 </menu>

@@ -26,6 +26,11 @@
     <string name="add_assessment">Add Assessment</string>
     <string name="add_note">Add Note</string>
     <string name="share_notes">Share Notes</string>
+    <string name="edit_course">Edit Course</string>
+    <string name="delete_course">Delete Course</string>
+
+    <!--menu_assessment_detail strings-->
+    <string name="edit_assessment">Edit Assessment</string>
 
     <!--Add term/course strings-->
     <string name="not_set">Not Set</string>

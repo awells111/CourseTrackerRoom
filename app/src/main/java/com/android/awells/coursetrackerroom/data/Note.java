@@ -27,12 +27,12 @@ public class Note {
     /**
      * The name of the course_id column.
      */
-    public static final String COLUMN_COURSE_ID = "course_id";
+    public static final String COLUMN_COURSE_ID = Course.TABLE_NAME + BaseColumns._ID;
 
     /**
      * The name of the ID column.
      */
-    public static final String COLUMN_ID = BaseColumns._ID;
+    public static final String COLUMN_ID = TABLE_NAME + BaseColumns._ID;
 
     /**
      * The name of the text column.

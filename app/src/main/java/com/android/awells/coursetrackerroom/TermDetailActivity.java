@@ -76,6 +76,7 @@ public class TermDetailActivity extends AppCompatActivity {
             @Override
             public void onItemClick(View v, int position) {
                 Intent intent = new Intent(TermDetailActivity.this, CourseDetailActivity.class);
+                intent.putExtra(Term.COLUMN_ID, termId);
                 intent.putExtra(Course.COLUMN_ID, mCourses.get(position).getId());
 
                 startActivityForResult(intent, 1);
