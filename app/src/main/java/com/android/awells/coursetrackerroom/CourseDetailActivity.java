@@ -1,6 +1,7 @@
 package com.android.awells.coursetrackerroom;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -114,6 +115,21 @@ public class CourseDetailActivity extends AppCompatActivity {
                 Intent noteIntent = new Intent(CourseDetailActivity.this, AddNoteActivity.class);
                 noteIntent.putExtra(Course.COLUMN_ID, courseId);
                 startActivityForResult(noteIntent, 1);
+                return true;
+            case R.id.action_share_notes:
+
+                //Create one String made from every note in mNotes
+                StringBuilder sb = new StringBuilder();
+                for (Note n : mNotes) { //For each note in mNotes
+                    sb.append(n.getText()); //Add the note text to the StringBuilder
+                    sb.append("\n"); //Move to a new line
+                }
+                
+                //Send the String to an email app
+                Intent shareIntent = new Intent(Intent.ACTION_VIEW);
+                Uri data = Uri.parse("mailto:?subject=" + this.getTitle() + " " + getString(R.string.notes) +  "&body=" + sb.toString());
+                shareIntent.setData(data);
+                startActivity(shareIntent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

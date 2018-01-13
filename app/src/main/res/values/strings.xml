@@ -25,6 +25,7 @@
     <!--menu_course_detail strings-->
     <string name="add_assessment">Add Assessment</string>
     <string name="add_note">Add Note</string>
+    <string name="share_notes">Share Notes</string>
 
     <!--Add term/course strings-->
     <string name="not_set">Not Set</string>
@@ -57,6 +58,7 @@
     <string name="title_activity_add_note">AddNoteActivity</string>
 
     <!--Note-->
+    <string name="notes">Notes</string>
     <string name="notes_colon">Notes: </string>
 
     <!--Error Messages-->
