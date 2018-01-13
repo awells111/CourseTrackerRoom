@@ -12,7 +12,11 @@ import com.android.awells.coursetrackerroom.data.CourseMentor;
 import com.android.awells.coursetrackerroom.data.CourseTrackerDatabase;
 import com.android.awells.coursetrackerroom.data.Note;
 
+import static com.android.awells.coursetrackerroom.MainActivity.CODE_NO_INPUT;
+
 public class AddNoteActivity extends AppCompatActivity {
+
+    private long courseId;
 
     private EditText noteEditText;
 
@@ -20,6 +24,8 @@ public class AddNoteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_note);
+
+        courseId = getIntent().getLongExtra(Course.COLUMN_ID, CODE_NO_INPUT);
 
         noteEditText = findViewById(R.id.add_course_note);
     }
@@ -53,9 +59,10 @@ public class AddNoteActivity extends AppCompatActivity {
     }
 
     private void saveItem() {
-        //Create Note from fields todo get courseId
+        //Create Note from fields
         Note note = new Note();
         note.setText(noteEditText.getText().toString());
+        note.setCourseId(courseId);
 
         //Insert Course into database
         CourseTrackerDatabase.getInstance(getApplicationContext()).note().insert(note);

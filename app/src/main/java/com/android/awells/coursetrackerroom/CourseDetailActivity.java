@@ -62,12 +62,12 @@ public class CourseDetailActivity extends AppCompatActivity {
                 return true;
             case R.id.action_add_assessment:
                 Intent assessmentIntent = new Intent(CourseDetailActivity.this, AddAssessmentActivity.class);
-                assessmentIntent.putExtra(Course.COLUMN_ID, CODE_NO_INPUT);
+                assessmentIntent.putExtra(Course.COLUMN_ID, courseId);
                 startActivityForResult(assessmentIntent, 1);
                 return true;
             case R.id.action_add_note:
                 Intent noteIntent = new Intent(CourseDetailActivity.this, AddNoteActivity.class);
-                noteIntent.putExtra(Course.COLUMN_ID, CODE_NO_INPUT);
+                noteIntent.putExtra(Course.COLUMN_ID, courseId);
                 startActivityForResult(noteIntent, 1);
                 return true;
             default:
