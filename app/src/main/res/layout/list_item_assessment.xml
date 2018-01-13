@@ -20,8 +20,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
             tools:text="Objective Assessment"/>
 
         <LinearLayout
@@ -31,7 +29,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/test_score"/>
+                android:text="@string/test_score_colon"/>
 
             <TextView
                 android:id="@+id/assessment_score_list"
@@ -47,7 +45,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/scheduled_time"/>
+                android:text="@string/scheduled_time_colon"/>
 
             <TextView
                 android:id="@+id/assessment_scheduled_time_list"
@@ -63,7 +61,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/notification_time"/>
+                android:text="@string/notification_time_colon"/>
 
             <TextView
                 android:id="@+id/assessment_notification_time_list"

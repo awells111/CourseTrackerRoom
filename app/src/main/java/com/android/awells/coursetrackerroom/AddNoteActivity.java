@@ -46,7 +46,7 @@ public class AddNoteActivity extends AppCompatActivity {
             case R.id.action_save:
                 if (isValidData()) { // Check for valid inputs
                     saveItem();
-                    setResult(RESULT_OK, null); // Let CourseDetailActivity know it needs to update the UI
+                    setResult(RESULT_OK); // Let CourseDetailActivity know it needs to update the UI
                     finish();
                 } else { // If data is invalid, notify user with a Toast
                     Toast.makeText(AddNoteActivity.this, getString(R.string.enter_valid_data), Toast.LENGTH_LONG).show();

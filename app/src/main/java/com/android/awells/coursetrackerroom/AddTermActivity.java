@@ -59,7 +59,7 @@ public class AddTermActivity extends AppCompatActivity implements DatePickerDial
             case R.id.action_save:
                 if (isValidData()) { // Check for valid inputs
                     saveItem();
-                    setResult(RESULT_OK, null); // Let MainActivity know it needs to update the UI
+                    setResult(RESULT_OK); // Let MainActivity know it needs to update the UI
                     finish();
                 } else { // If data is invalid, notify user with a Toast
                     Toast.makeText(AddTermActivity.this, getString(R.string.enter_valid_data), Toast.LENGTH_LONG).show();

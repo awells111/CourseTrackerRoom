@@ -1,11 +1,9 @@
 package com.android.awells.coursetrackerroom;
 
 import android.app.DatePickerDialog;
-import android.arch.persistence.room.PrimaryKey;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,7 +27,7 @@ import static com.android.awells.coursetrackerroom.MainActivity.CODE_NO_INPUT;
 
 public class AddCourseActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
-    private Course mCourse;
+    private Course course;
 
     private long courseId; //Used to see if we are editing an old course or adding a new one
     private long termId;
@@ -83,7 +81,7 @@ public class AddCourseActivity extends AppCompatActivity implements DatePickerDi
             case R.id.action_save:
                 if (isValidData()) { // Check for valid inputs
                     saveItem();
-                    setResult(RESULT_OK, null); // Let TermDetailActivity know it needs to update the UI
+                    setResult(RESULT_OK); // Let TermDetailActivity know it needs to update the UI
                     finish();
                 } else { // If data is invalid, notify user with a Toast
                     Toast.makeText(AddCourseActivity.this, getString(R.string.enter_valid_data), Toast.LENGTH_LONG).show();
@@ -120,25 +118,25 @@ public class AddCourseActivity extends AppCompatActivity implements DatePickerDi
 
     private void loadCourseInfo() { //Use only for existing courses, not new ones
         if (!isNewCourse()) { //If we are editing a course
-            mCourse = CourseTrackerDatabase.getInstance(getApplicationContext()).course().selectByCourseId(courseId); //Retrieve the course
+            course = CourseTrackerDatabase.getInstance(getApplicationContext()).course().selectByCourseId(courseId); //Retrieve the course
 
             //Populate all fields with the course info
-            courseTitleEditText.setText(mCourse.getTitle()); //Set the title
+            courseTitleEditText.setText(course.getTitle()); //Set the title
 
             //Set the date fields
-            courseStartDate = mCourse.getStartDate();
-            courseEndDate = mCourse.getEndDate();
+            courseStartDate = course.getStartDate();
+            courseEndDate = course.getEndDate();
 
-            courseStatusView.setSelection(getIndex(courseStatusView, mCourse.getStatus())); //Set the course status
+            courseStatusView.setSelection(getIndex(courseStatusView, course.getStatus())); //Set the course status
 
             //Set CourseMentor info
-            CourseMentor courseMentor = mCourse.getCourseMentor();
+            CourseMentor courseMentor = course.getCourseMentor();
             courseMentorNameView.setText(courseMentor.getName());
             courseMentorPhoneView.setText(courseMentor.getPhoneNumber());
             courseMentorEmailView.setText(courseMentor.getEmail());
         } else {
-            mCourse = new Course();
-            mCourse.setTermId(termId);
+            course = new Course();
+            course.setTermId(termId);
         }
     }
 
@@ -160,23 +158,23 @@ public class AddCourseActivity extends AppCompatActivity implements DatePickerDi
 
     private void saveItem() {
         //Create Course from fields
-        mCourse.setTitle(courseTitleEditText.getText().toString());
-        mCourse.setStatus(courseStatusView.getSelectedItem().toString());
-        mCourse.setStartDate(courseStartDate);
-        mCourse.setEndDate(courseEndDate);
+        course.setTitle(courseTitleEditText.getText().toString());
+        course.setStatus(courseStatusView.getSelectedItem().toString());
+        course.setStartDate(courseStartDate);
+        course.setEndDate(courseEndDate);
 
         //Create CourseMentor from fields
         CourseMentor courseMentor = new CourseMentor();
         courseMentor.setName(courseMentorNameView.getText().toString());
         courseMentor.setPhoneNumber(courseMentorPhoneView.getText().toString());
         courseMentor.setEmail(courseMentorEmailView.getText().toString());
-        mCourse.setCourseMentor(courseMentor);
+        course.setCourseMentor(courseMentor);
 
         //Insert Course into database
         if (isNewCourse()) {
-            CourseTrackerDatabase.getInstance(getApplicationContext()).course().insert(mCourse);
+            CourseTrackerDatabase.getInstance(getApplicationContext()).course().insert(course);
         } else {
-            CourseTrackerDatabase.getInstance(getApplicationContext()).course().update(mCourse);
+            CourseTrackerDatabase.getInstance(getApplicationContext()).course().update(course);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.android.awells.coursetrackerroom;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.awells.coursetrackerroom.data.Assessment;
@@ -53,6 +55,7 @@ public class CourseDetailActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
+            setResult(RESULT_OK); // Let TermDetailActivity know it needs to update the UI
             updateUI();
         }
     }
@@ -68,13 +71,13 @@ public class CourseDetailActivity extends AppCompatActivity {
         endDateView.setText(formatMyTime(course.getEndDate()));
 
 
-//        final RecyclerView assessmentsRecyclerView = findViewById(R.id.assessments_view_course_detail); todo
-//        assessmentsRecyclerView.setLayoutManager(new LinearLayoutManager(assessmentsRecyclerView.getContext()));
-//
-//        mAssessments = CourseTrackerDatabase.getInstance(getApplicationContext()).assessment().selectAssessmentsFromCourse(courseId);
-//        AssessmentAdapter assessmentAdapter = new AssessmentAdapter(mAssessments);
-//        assessmentAdapter.setOnItemClickListener(mOnAssessmentClickListener());
-//        assessmentsRecyclerView.setAdapter(assessmentAdapter);
+        final RecyclerView assessmentsRecyclerView = findViewById(R.id.assessments_view_course_detail);
+        assessmentsRecyclerView.setLayoutManager(new LinearLayoutManager(assessmentsRecyclerView.getContext()));
+
+        mAssessments = CourseTrackerDatabase.getInstance(getApplicationContext()).assessment().selectAssessmentsFromCourse(courseId);
+        AssessmentAdapter assessmentAdapter = new AssessmentAdapter(getApplicationContext(), mAssessments);
+        assessmentAdapter.setOnItemClickListener(mOnAssessmentClickListener());
+        assessmentsRecyclerView.setAdapter(assessmentAdapter);
 
         final RecyclerView notesRecyclerView = findViewById(R.id.notes_view_course_detail);
         notesRecyclerView.setLayoutManager(new LinearLayoutManager(notesRecyclerView.getContext()));
@@ -82,20 +85,20 @@ public class CourseDetailActivity extends AppCompatActivity {
         mNotes = CourseTrackerDatabase.getInstance(getApplicationContext()).note().selectNotesFromCourse(courseId);
         NoteAdapter noteAdapter = new NoteAdapter(mNotes);
         notesRecyclerView.setAdapter(noteAdapter);
-        //todo Show assessments
     }
 
-//    public AssessmentAdapter.OnItemClickListener mOnAssessmentClickListener() { todo
-//        return new CourseAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(View v, int position) {
-//                Intent intent = new Intent(CourseDetailActivity.this, AssessmentDetailActivity.class);
-//                intent.putExtra(Course.COLUMN_ID, mAssessments.get(position).getId());
+    public AssessmentAdapter.OnItemClickListener mOnAssessmentClickListener() {
+        return new AssessmentAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+//                Intent intent = new Intent(CourseDetailActivity.this, AssessmentDetailActivity.class);  //todo
+//                intent.putExtra(Course.COLUMN_ID, mAssessments.get(position).getCourseId());
+//                intent.putExtra(Assessment.COLUMN_ID, mAssessments.get(position).getId());
 //
 //                startActivityForResult(intent, 1);
-//            }
-//        };
-//    }
+            }
+        };
+    }
 //
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -119,7 +122,7 @@ public class CourseDetailActivity extends AppCompatActivity {
             case R.id.action_delete_course:
                 int count = CourseTrackerDatabase.getInstance(getApplicationContext()).course().deleteById(courseId);
                 Log.d(TAG, "Deleted " + count + " course(s)");
-                setResult(RESULT_OK, null); // Let TermDetailActivity know it needs to update the UI
+                setResult(RESULT_OK); // Let TermDetailActivity know it needs to update the UI
                 finish();
                 return true;
             case R.id.action_add_assessment:
@@ -150,6 +153,96 @@ public class CourseDetailActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+
+    static class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.AssessmentHolder> {
+
+        public interface OnItemClickListener {
+            void onItemClick(View v, int position);
+        }
+
+        public class AssessmentHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+            TextView typeView;
+            TextView scoreView;
+            TextView scheduledTimeView;
+            TextView notificationTimeView;
+
+            public AssessmentHolder(View itemView) {
+                super(itemView);
+
+                typeView = itemView.findViewById(R.id.assessment_type_list);
+                scoreView = itemView.findViewById(R.id.assessment_score_list);
+                scheduledTimeView = itemView.findViewById(R.id.assessment_scheduled_time_list);
+                notificationTimeView = itemView.findViewById(R.id.assessment_notification_time_list);
+
+                itemView.setOnClickListener(this);
+            }
+
+            @Override
+            public void onClick(View v) {
+                postItemClick(this);
+            }
+        }
+
+        private Context mContext;
+
+        private List<Assessment> mAssessments;
+        private AssessmentAdapter.OnItemClickListener mOnItemClickListener;
+
+        public AssessmentAdapter(Context context, List<Assessment> assessments) {
+            mContext = context;
+            mAssessments = assessments;
+        }
+
+        public void setOnItemClickListener(AssessmentAdapter.OnItemClickListener listener) {
+            mOnItemClickListener = listener;
+        }
+
+        private void postItemClick(AssessmentAdapter.AssessmentHolder holder) {
+            if (mOnItemClickListener != null) {
+                mOnItemClickListener.onItemClick(holder.itemView, holder.getAdapterPosition());
+            }
+        }
+
+        @Override
+        public AssessmentAdapter.AssessmentHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_assessment, parent, false);
+
+            return new AssessmentAdapter.AssessmentHolder(itemView);
+        }
+
+        @Override
+        public void onBindViewHolder(AssessmentAdapter.AssessmentHolder holder, int position) {
+            String notSet = mContext.getResources().getString(R.string.not_set);
+            Log.e("tag", notSet);
+            Assessment assessment = mAssessments.get(position);
+            //Type score scheduled notification
+            holder.typeView.setText(assessment.getType());
+
+            if (assessment.getScore() < 0) { //If assessment is not taken
+                holder.scoreView.setText(notSet);
+            } else {
+                holder.scoreView.setText(Integer.toString(assessment.getScore()));
+            }
+
+            if (assessment.getScheduledTime() == Long.MIN_VALUE) { //If assessment is not scheduled
+                holder.scheduledTimeView.setText(notSet);
+            } else {
+                holder.scheduledTimeView.setText(formatMyTime(assessment.getScheduledTime()));
+            }
+
+            if (assessment.getStartNotification() == Long.MIN_VALUE) { //If assessment notification is not set
+                holder.notificationTimeView.setText(notSet);
+            } else {
+                holder.notificationTimeView.setText(formatMyTime(assessment.getStartNotification()));
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return mAssessments.size();
+        }
     }
 
     static class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {

@@ -121,7 +121,7 @@ public class TermDetailActivity extends AppCompatActivity {
                         if (mCourses.size() == 0) { //if the term has no courses
                             int count = CourseTrackerDatabase.getInstance(getApplicationContext()).term().deleteById(termId);
                             Log.d(TAG, "Deleted " + count + " term(s)");
-                            setResult(RESULT_OK, null); // Let MainActivity know it needs to update the UI
+                            setResult(RESULT_OK); // Let MainActivity know it needs to update the UI
                             finish();
                         } else { //else if the term still has courses
                             Toast.makeText(TermDetailActivity.this, getString(R.string.delete_courses_first), Toast.LENGTH_SHORT).show();
@@ -146,11 +146,17 @@ public class TermDetailActivity extends AppCompatActivity {
         public class CourseHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
             TextView titleView;
+            TextView statusView;
+            TextView startDateview;
+            TextView endDateView;
 
             public CourseHolder(View itemView) {
                 super(itemView);
 
                 titleView = itemView.findViewById(R.id.course_title_list);
+                statusView = itemView.findViewById(R.id.course_status_list);
+                startDateview = itemView.findViewById(R.id.course_start_date_list);
+                endDateView = itemView.findViewById(R.id.course_end_date_list);
 
                 itemView.setOnClickListener(this);
             }
@@ -187,9 +193,12 @@ public class TermDetailActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(CourseAdapter.CourseHolder holder, int position) {
-            String title = mCourses.get(position).getTitle();
+            Course course = mCourses.get(position);
 
-            holder.titleView.setText(title);
+            holder.titleView.setText(course.getTitle());
+            holder.statusView.setText(course.getStatus());
+            holder.startDateview.setText(formatMyTime(course.getStartDate()));
+            holder.endDateView.setText(formatMyTime(course.getEndDate()));
         }
 
         @Override
@@ -197,9 +206,5 @@ public class TermDetailActivity extends AppCompatActivity {
             return mCourses.size();
         }
 
-        public void setCourses(List<Course> courses) {
-            mCourses = courses;
-            notifyDataSetChanged();
-        }
     }
 }
