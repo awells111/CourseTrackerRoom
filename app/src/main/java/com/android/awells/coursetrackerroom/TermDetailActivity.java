@@ -22,6 +22,8 @@ import com.android.awells.coursetrackerroom.data.Term;
 
 import java.util.List;
 
+import static com.android.awells.coursetrackerroom.MainActivity.CODE_NO_INPUT;
+
 public class TermDetailActivity extends AppCompatActivity {
 
     private static final String TAG = TermDetailActivity.class.getSimpleName();
@@ -34,7 +36,7 @@ public class TermDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_term_detail);
 
-        termId = getIntent().getLongExtra(Term.COLUMN_ID, -1); // Retrieve the term's ID from the intent
+        termId = getIntent().getLongExtra(Term.COLUMN_ID, CODE_NO_INPUT); // Retrieve the term's ID from the intent
         this.setTitle(CourseTrackerDatabase.getInstance(getApplicationContext()).term().selectById(termId).getTitle()); //Set the title by retrieving the term
 
         updateUI();
@@ -86,7 +88,8 @@ public class TermDetailActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.action_add_course:
-                Intent intent = new Intent(this, AddTermActivity.class);
+                Intent intent = new Intent(this, AddCourseActivity.class);
+                intent.putExtra(Term.COLUMN_ID, termId); //Input Term ID so we can add a course to it
                 startActivityForResult(intent, 1);
                 return true;
             case R.id.action_delete_term:

@@ -49,7 +49,7 @@ public class Course {
 
     /** The unique ID of the parent term */
     @ColumnInfo(index = true, name = COLUMN_TERM_ID)
-    private int termId;
+    private long termId;
 
     /** The unique ID of the course. */
     @PrimaryKey(autoGenerate = true)
@@ -78,11 +78,12 @@ public class Course {
     private CourseMentor courseMentor;
 
     //<editor-fold defaultstate="collapsed" desc="Getters and Setters">
-    public int getTermId() {
+
+    public long getTermId() {
         return termId;
     }
 
-    public void setTermId(int termId) {
+    public void setTermId(long termId) {
         this.termId = termId;
     }
 
@@ -133,8 +134,10 @@ public class Course {
     public void setCourseMentor(CourseMentor courseMentor) {
         this.courseMentor = courseMentor;
     }
+
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="equals hashCode and toString">
+
     @Override
     public String toString() {
         return "Course{" +
@@ -168,7 +171,7 @@ public class Course {
 
     @Override
     public int hashCode() {
-        int result = getTermId();
+        int result = (int) (getTermId() ^ (getTermId() >>> 32));
         result = 31 * result + (int) (getId() ^ (getId() >>> 32));
         result = 31 * result + (getTitle() != null ? getTitle().hashCode() : 0);
         result = 31 * result + (getStatus() != null ? getStatus().hashCode() : 0);
@@ -177,7 +180,7 @@ public class Course {
         result = 31 * result + (getCourseMentor() != null ? getCourseMentor().hashCode() : 0);
         return result;
     }
-    //</editor-fold>
+//</editor-fold>
 
     /** Dummy data. */
     static final String[] COURSES = {

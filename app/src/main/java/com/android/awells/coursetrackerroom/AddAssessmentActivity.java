@@ -19,8 +19,11 @@ import java.util.Calendar;
 
 import static com.android.awells.coursetrackerroom.DatePickerFragment.DATE_FORMAT;
 import static com.android.awells.coursetrackerroom.DatePickerFragment.DATE_PICKER_TAG;
+import static com.android.awells.coursetrackerroom.MainActivity.CODE_NO_INPUT;
 
 public class AddAssessmentActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+
+    private long courseId;
 
     private String datePickerKey = "";
 
@@ -30,6 +33,8 @@ public class AddAssessmentActivity extends AppCompatActivity implements DatePick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_course);
+
+        courseId = getIntent().getLongExtra(Course.COLUMN_ID, CODE_NO_INPUT);
 
         //todo set views
 
@@ -96,6 +101,7 @@ public class AddAssessmentActivity extends AppCompatActivity implements DatePick
         //todo saveItem
         // Create assessment from fields
         Assessment assessment = new Assessment();
+        assessment.setCourseId(courseId);
 
         //Insert Assessment into database
         CourseTrackerDatabase.getInstance(getApplicationContext()).assessment().insert(assessment);

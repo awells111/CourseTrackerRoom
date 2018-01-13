@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,8 +23,11 @@ import java.util.Calendar;
 
 import static com.android.awells.coursetrackerroom.DatePickerFragment.DATE_FORMAT;
 import static com.android.awells.coursetrackerroom.DatePickerFragment.DATE_PICKER_TAG;
+import static com.android.awells.coursetrackerroom.MainActivity.CODE_NO_INPUT;
 
 public class AddCourseActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+
+    private long termId;
 
     private long courseStartDate = Long.MIN_VALUE;
     private long courseEndDate = Long.MIN_VALUE;
@@ -41,6 +45,8 @@ public class AddCourseActivity extends AppCompatActivity implements DatePickerDi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_course);
+
+        termId = getIntent().getLongExtra(Term.COLUMN_ID, CODE_NO_INPUT);
 
         courseTitleEditText = findViewById(R.id.add_course_title);
         courseStartView = findViewById(R.id.add_course_start);
@@ -122,17 +128,15 @@ public class AddCourseActivity extends AppCompatActivity implements DatePickerDi
     }
 
     private void saveItem() {
-
-
-
-        //Create Course from fields             //todo set termid
+        //Create Course from fields
         Course course = new Course();
         course.setTitle(courseTitleEditText.getText().toString());
         course.setStatus(courseStatusView.getSelectedItem().toString());
         course.setStartDate(courseStartDate);
         course.setEndDate(courseEndDate);
+        course.setTermId(termId);
 
-        //Create CourseMentor from fields         //todo set courseid
+        //Create CourseMentor from fields
         CourseMentor courseMentor = new CourseMentor();
         courseMentor.setName(courseMentorNameView.getText().toString());
         courseMentor.setPhoneNumber(courseMentorPhoneView.getText().toString());

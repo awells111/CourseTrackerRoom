@@ -41,7 +41,7 @@ public class Assessment {
 
     /** The unique ID of the parent course */
     @ColumnInfo(index = true, name = COLUMN_COURSE_ID)
-    private int courseId;
+    private long courseId;
 
     /** The unique ID of the assessment. */
     @PrimaryKey(autoGenerate = true)
@@ -65,11 +65,12 @@ public class Assessment {
     private long startNotification = Long.MIN_VALUE;
 
     //<editor-fold defaultstate="collapsed" desc="Getters and Setters">
-    public int getCourseId() {
+
+    public long getCourseId() {
         return courseId;
     }
 
-    public void setCourseId(int courseId) {
+    public void setCourseId(long courseId) {
         this.courseId = courseId;
     }
 
@@ -112,8 +113,10 @@ public class Assessment {
     public void setStartNotification(long startNotification) {
         this.startNotification = startNotification;
     }
+
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="equals hashCode and toString">
+
     @Override
     public String toString() {
         return "Assessment{" +
@@ -143,7 +146,7 @@ public class Assessment {
 
     @Override
     public int hashCode() {
-        int result = getCourseId();
+        int result = (int) (getCourseId() ^ (getCourseId() >>> 32));
         result = 31 * result + (int) (getId() ^ (getId() >>> 32));
         result = 31 * result + (getType() != null ? getType().hashCode() : 0);
         result = 31 * result + getScore();
@@ -151,5 +154,6 @@ public class Assessment {
         result = 31 * result + (int) (getStartNotification() ^ (getStartNotification() >>> 32));
         return result;
     }
-//</editor-fold>
+
+    //</editor-fold>
 }

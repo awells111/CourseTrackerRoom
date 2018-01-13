@@ -22,6 +22,8 @@ import static com.android.awells.coursetrackerroom.DatePickerFragment.formatMyTi
 
 public class MainActivity extends AppCompatActivity {
 
+    public static long CODE_NO_INPUT = -1; //Used as the default with getIntent().getLongExtra()
+
     List<Term> mTerms;
 
     @Override

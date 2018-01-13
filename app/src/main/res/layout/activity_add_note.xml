@@ -8,12 +8,13 @@
         android:id="@+id/add_course_note"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
         android:enabled="true"
-        android:minLines="6"
-        android:maxLines="6"
-        android:isScrollContainer="true"
         android:focusable="true"
-        android:hint="@string/course_note"/>
+        android:gravity="top"
+        android:hint="@string/course_note"
+        android:inputType="textMultiLine"
+        android:isScrollContainer="true"
+        android:maxLines="6"
+        android:minLines="6"/>
 
 </android.support.constraint.ConstraintLayout>
