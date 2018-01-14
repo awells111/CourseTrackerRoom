@@ -5,11 +5,6 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
 
-    <!--Format will be "<course_name> + <date_notification>" so we will include the space here-->
-    <string name="start_date_notification"> start date is approaching</string>
-    <string name="end_date_notification"> end date is approaching</string>
-
-
     <!--General menu strings-->
     <string name="action_save">Save</string>
 
@@ -31,6 +26,7 @@
 
     <!--menu_assessment_detail strings-->
     <string name="edit_assessment">Edit Assessment</string>
+    <string name="delete_assessment">Delete Assessment</string>
 
     <!--Add term/course strings-->
     <string name="not_set">Not Set</string>
@@ -69,8 +65,9 @@
     <string name="notes_colon">Notes: </string>
 
     <!--Notifications-->
-    <string name="set_start_date_notification">Set Start Date Notification</string>
-    <string name="set_end_date_notification">Set End Date Notification</string>
+    <string name="assessment_time_notification">assessment start time is now!</string>
+    <string name="start_date_notification">start date is now!</string>
+    <string name="end_date_notification">end date is now!</string>
 
     <!--Error Messages-->
     <string name="enter_valid_data">Please set all fields</string>

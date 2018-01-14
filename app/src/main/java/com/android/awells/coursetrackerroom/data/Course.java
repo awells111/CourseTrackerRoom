@@ -23,6 +23,9 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
         childColumns = Course.COLUMN_TERM_ID))
 public class Course {
 
+    /** Used to schedule a notification. */
+    public static final int ALARM_REQUEST_CODE = 1000;
+
     /** The name of the Course table. */
     public static final String TABLE_NAME = "courses";
 

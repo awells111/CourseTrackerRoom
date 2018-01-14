@@ -17,7 +17,7 @@ import com.android.awells.coursetrackerroom.data.Term;
 
 import java.util.List;
 
-import static com.android.awells.coursetrackerroom.DatePickerFragment.formatMyTime;
+import static com.android.awells.coursetrackerroom.date.DatePickerFragment.formatMyDate;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -142,8 +142,8 @@ public class MainActivity extends AppCompatActivity {
             Term term = mTerms.get(position);
 
             String title = term.getTitle();
-            String startDate = formatMyTime(term.getStartDate());
-            String endDate = formatMyTime(term.getEndDate());
+            String startDate = formatMyDate(term.getStartDate());
+            String endDate = formatMyDate(term.getEndDate());
 
             holder.titleView.setText(title);
             holder.startDateView.setText(startDate);

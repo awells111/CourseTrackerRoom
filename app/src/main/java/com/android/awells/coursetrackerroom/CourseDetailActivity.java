@@ -13,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.awells.coursetrackerroom.data.Assessment;
@@ -24,8 +23,9 @@ import com.android.awells.coursetrackerroom.data.Term;
 
 import java.util.List;
 
-import static com.android.awells.coursetrackerroom.DatePickerFragment.formatMyTime;
+import static com.android.awells.coursetrackerroom.date.DatePickerFragment.formatMyDate;
 import static com.android.awells.coursetrackerroom.MainActivity.CODE_NO_INPUT;
+import static com.android.awells.coursetrackerroom.date.DatePickerFragment.formatMyDateTime;
 
 public class CourseDetailActivity extends AppCompatActivity {
 
@@ -67,8 +67,8 @@ public class CourseDetailActivity extends AppCompatActivity {
         TextView startDateView = findViewById(R.id.course_start_date_detail);
         TextView endDateView = findViewById(R.id.course_end_date_detail);
 
-        startDateView.setText(formatMyTime(course.getStartDate()));
-        endDateView.setText(formatMyTime(course.getEndDate()));
+        startDateView.setText(formatMyDate(course.getStartDate()));
+        endDateView.setText(formatMyDate(course.getEndDate()));
 
 
         final RecyclerView assessmentsRecyclerView = findViewById(R.id.assessments_view_course_detail);
@@ -91,11 +91,11 @@ public class CourseDetailActivity extends AppCompatActivity {
         return new AssessmentAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-//                Intent intent = new Intent(CourseDetailActivity.this, AssessmentDetailActivity.class);  //todo
-//                intent.putExtra(Course.COLUMN_ID, mAssessments.get(position).getCourseId());
-//                intent.putExtra(Assessment.COLUMN_ID, mAssessments.get(position).getId());
-//
-//                startActivityForResult(intent, 1);
+                Intent intent = new Intent(CourseDetailActivity.this, AssessmentDetailActivity.class);
+                intent.putExtra(Course.COLUMN_ID, mAssessments.get(position).getCourseId());
+                intent.putExtra(Assessment.COLUMN_ID, mAssessments.get(position).getId());
+
+                startActivityForResult(intent, 1);
             }
         };
     }
@@ -215,9 +215,9 @@ public class CourseDetailActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(AssessmentAdapter.AssessmentHolder holder, int position) {
             String notSet = mContext.getResources().getString(R.string.not_set);
-            Log.e("tag", notSet);
+
             Assessment assessment = mAssessments.get(position);
-            //Type score scheduled notification
+
             holder.typeView.setText(assessment.getType());
 
             if (assessment.getScore() < 0) { //If assessment is not taken
@@ -229,13 +229,14 @@ public class CourseDetailActivity extends AppCompatActivity {
             if (assessment.getScheduledTime() == Long.MIN_VALUE) { //If assessment is not scheduled
                 holder.scheduledTimeView.setText(notSet);
             } else {
-                holder.scheduledTimeView.setText(formatMyTime(assessment.getScheduledTime()));
+                holder.scheduledTimeView.setText(formatMyDate(assessment.getScheduledTime()));
             }
 
             if (assessment.getStartNotification() == Long.MIN_VALUE) { //If assessment notification is not set
+
                 holder.notificationTimeView.setText(notSet);
             } else {
-                holder.notificationTimeView.setText(formatMyTime(assessment.getStartNotification()));
+                holder.notificationTimeView.setText(formatMyDateTime(assessment.getStartNotification()));
             }
         }
 

@@ -20,8 +20,7 @@
             android:name=".AddTermActivity"
             android:label="@string/add_term"
             android:launchMode="singleTop"
-            android:parentActivityName=".MainActivity"
-            />
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".TermDetailActivity"
             android:parentActivityName=".MainActivity"/>
@@ -29,25 +28,28 @@
             android:name=".AddCourseActivity"
             android:label="@string/edit_course"
             android:launchMode="singleTop"
-            android:parentActivityName=".TermDetailActivity"
-            />
+            android:parentActivityName=".TermDetailActivity"/>
         <activity
             android:name=".CourseDetailActivity"
             android:parentActivityName=".TermDetailActivity"/>
-
         <activity
             android:name=".AddNoteActivity"
             android:label="@string/add_note"
             android:launchMode="singleTop"
-            android:parentActivityName=".CourseDetailActivity"
-            />
-
+            android:parentActivityName=".CourseDetailActivity"/>
         <activity
             android:name=".AddAssessmentActivity"
             android:label="@string/add_assessment"
             android:launchMode="singleTop"
-            android:parentActivityName=".CourseDetailActivity"
-            />
+            android:parentActivityName=".CourseDetailActivity"/>
+        <activity android:name=".AssessmentDetailActivity">
+        </activity>
+
+        <receiver
+            android:name=".notification.AlarmReceiver"
+            android:enabled="true"
+            android:exported="false">
+        </receiver>
     </application>
 
 </manifest>

@@ -17,13 +17,15 @@ import com.android.awells.coursetrackerroom.data.Course;
 import com.android.awells.coursetrackerroom.data.CourseMentor;
 import com.android.awells.coursetrackerroom.data.CourseTrackerDatabase;
 import com.android.awells.coursetrackerroom.data.Term;
+import com.android.awells.coursetrackerroom.date.DatePickerFragment;
 
 import java.util.Calendar;
 
 import static com.android.awells.coursetrackerroom.CourseTrackerHelper.getIndex;
-import static com.android.awells.coursetrackerroom.DatePickerFragment.DATE_FORMAT;
-import static com.android.awells.coursetrackerroom.DatePickerFragment.DATE_PICKER_TAG;
+import static com.android.awells.coursetrackerroom.date.DatePickerFragment.DATE_FORMAT;
+import static com.android.awells.coursetrackerroom.date.DatePickerFragment.DATE_PICKER_TAG;
 import static com.android.awells.coursetrackerroom.MainActivity.CODE_NO_INPUT;
+import static com.android.awells.coursetrackerroom.date.DatePickerFragment.formatMyDate;
 
 public class AddCourseActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
@@ -95,12 +97,12 @@ public class AddCourseActivity extends AppCompatActivity implements DatePickerDi
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
-        //Set to noon on the selected day
+        //Set to midnight on the selected day
         Calendar c = Calendar.getInstance();
         c.set(Calendar.YEAR, year);
         c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, day);
-        c.set(Calendar.HOUR_OF_DAY, 12);
+        c.set(Calendar.HOUR_OF_DAY, 0);
         c.set(Calendar.MINUTE, 0);
         c.set(Calendar.SECOND, 0);
         c.set(Calendar.MILLISECOND, 0);
@@ -144,15 +146,13 @@ public class AddCourseActivity extends AppCompatActivity implements DatePickerDi
         if (courseStartDate == Long.MIN_VALUE) {
             courseStartView.setText(R.string.not_set);
         } else {
-            CharSequence formatted = DateFormat.format(DATE_FORMAT, courseStartDate);
-            courseStartView.setText(formatted);
+            courseStartView.setText(formatMyDate(courseStartDate));
         }
 
         if (courseEndDate == Long.MIN_VALUE) {
             courseEndView.setText(R.string.not_set);
         } else {
-            CharSequence formatted = DateFormat.format(DATE_FORMAT, courseEndDate);
-            courseEndView.setText(formatted);
+            courseEndView.setText(formatMyDate(courseEndDate));
         }
     }
 

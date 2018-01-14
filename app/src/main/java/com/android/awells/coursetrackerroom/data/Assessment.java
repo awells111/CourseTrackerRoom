@@ -18,6 +18,10 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
                 parentColumns = Course.COLUMN_ID,
                 childColumns = Assessment.COLUMN_COURSE_ID))
 public class Assessment {
+
+    /** Used to schedule a notification. */
+    public static final int ALARM_REQUEST_CODE = 2000;
+
     /** The name of the Assessment table. */
     public static final String TABLE_NAME = "assessments";
 

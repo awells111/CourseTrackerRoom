@@ -22,7 +22,7 @@ import com.android.awells.coursetrackerroom.data.Term;
 
 import java.util.List;
 
-import static com.android.awells.coursetrackerroom.DatePickerFragment.formatMyTime;
+import static com.android.awells.coursetrackerroom.date.DatePickerFragment.formatMyDate;
 import static com.android.awells.coursetrackerroom.MainActivity.CODE_NO_INPUT;
 
 public class TermDetailActivity extends AppCompatActivity {
@@ -59,8 +59,8 @@ public class TermDetailActivity extends AppCompatActivity {
         TextView startDateView = findViewById(R.id.term_start_date_detail);
         TextView endDateView = findViewById(R.id.term_end_date_detail);
 
-        startDateView.setText(formatMyTime(term.getStartDate()));
-        endDateView.setText(formatMyTime(term.getEndDate()));
+        startDateView.setText(formatMyDate(term.getStartDate()));
+        endDateView.setText(formatMyDate(term.getEndDate()));
 
         final RecyclerView recyclerView = findViewById(R.id.recycler_view_term_detail);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
@@ -197,8 +197,8 @@ public class TermDetailActivity extends AppCompatActivity {
 
             holder.titleView.setText(course.getTitle());
             holder.statusView.setText(course.getStatus());
-            holder.startDateview.setText(formatMyTime(course.getStartDate()));
-            holder.endDateView.setText(formatMyTime(course.getEndDate()));
+            holder.startDateview.setText(formatMyDate(course.getStartDate()));
+            holder.endDateView.setText(formatMyDate(course.getEndDate()));
         }
 
         @Override

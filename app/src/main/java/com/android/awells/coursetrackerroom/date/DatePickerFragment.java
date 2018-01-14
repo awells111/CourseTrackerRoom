@@ -1,10 +1,11 @@
-package com.android.awells.coursetrackerroom;
+package com.android.awells.coursetrackerroom.date;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 /**
@@ -28,12 +29,17 @@ public class DatePickerFragment extends DialogFragment {
                 (DatePickerDialog.OnDateSetListener) getActivity(), year, month, day);
     }
 
-    public static String formatMyTime(long time) {
-        SimpleDateFormat sdfDate = new SimpleDateFormat(DATE_FORMAT);
-        return sdfDate.format(time);
+    public static String formatMyDate(long time) {
+        return DateFormat.getDateInstance().format(time);
     }
 
-    /*Returns a long that is equal to Midnight today.*/
+    public static String formatMyDateTime(long time) {
+        return DateFormat.getDateTimeInstance().format(time);
+    }
+
+    /**
+     * @return A long that is equal to Midnight today.
+     * */
     public static Long getBeginningOfDayTime() {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 0);
