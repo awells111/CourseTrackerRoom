@@ -24,7 +24,7 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 public class Course {
 
     /** Used to schedule a notification. */
-    public static final int ALARM_REQUEST_CODE = 1000;
+    public static final long ALARM_REQUEST_CODE = 1000;
 
     /** The name of the Course table. */
     public static final String TABLE_NAME = "courses";
@@ -139,7 +139,6 @@ public class Course {
     }
 
     //</editor-fold>
-    //<editor-fold defaultstate="collapsed" desc="equals hashCode and toString">
 
     @Override
     public String toString() {
@@ -153,37 +152,6 @@ public class Course {
                 ", courseMentor=" + courseMentor +
                 '}';
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Course course = (Course) o;
-
-        if (getTermId() != course.getTermId()) return false;
-        if (getId() != course.getId()) return false;
-        if (getStartDate() != course.getStartDate()) return false;
-        if (getEndDate() != course.getEndDate()) return false;
-        if (getTitle() != null ? !getTitle().equals(course.getTitle()) : course.getTitle() != null)
-            return false;
-        if (getStatus() != null ? !getStatus().equals(course.getStatus()) : course.getStatus() != null)
-            return false;
-        return getCourseMentor() != null ? getCourseMentor().equals(course.getCourseMentor()) : course.getCourseMentor() == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) (getTermId() ^ (getTermId() >>> 32));
-        result = 31 * result + (int) (getId() ^ (getId() >>> 32));
-        result = 31 * result + (getTitle() != null ? getTitle().hashCode() : 0);
-        result = 31 * result + (getStatus() != null ? getStatus().hashCode() : 0);
-        result = 31 * result + (int) (getStartDate() ^ (getStartDate() >>> 32));
-        result = 31 * result + (int) (getEndDate() ^ (getEndDate() >>> 32));
-        result = 31 * result + (getCourseMentor() != null ? getCourseMentor().hashCode() : 0);
-        return result;
-    }
-//</editor-fold>
 
     /** Dummy data. */
     static final String[] COURSES = {

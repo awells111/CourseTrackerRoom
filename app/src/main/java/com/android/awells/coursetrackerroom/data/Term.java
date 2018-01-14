@@ -79,7 +79,7 @@ public class Term {
         this.endDate = endDate;
     }
     //</editor-fold>
-    //<editor-fold defaultstate="collapsed" desc="equals hashCode and toString">
+
     @Override
     public String toString() {
         return "Term{" +
@@ -90,29 +90,6 @@ public class Term {
                 '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Term term = (Term) o;
-
-        if (getId() != term.getId()) return false;
-        if (getStartDate() != term.getStartDate()) return false;
-        if (getEndDate() != term.getEndDate()) return false;
-        return getTitle() != null ? getTitle().equals(term.getTitle()) : term.getTitle() == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) (getId() ^ (getId() >>> 32));
-        result = 31 * result + (getTitle() != null ? getTitle().hashCode() : 0);
-        result = 31 * result + (int) (getStartDate() ^ (getStartDate() >>> 32));
-        result = 31 * result + (int) (getEndDate() ^ (getEndDate() >>> 32));
-        return result;
-    }
-    //</editor-fold>
-    
     /** Dummy data. */
     static final String[] TERMS = {
             "Term 0", "Term 1", "Term 2", "Term 3", "Term 4"

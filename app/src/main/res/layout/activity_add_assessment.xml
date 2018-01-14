@@ -30,7 +30,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/notification_time_colon"/>
+            android:text="@string/notification_colon"/>
 
         <TextView
             android:id="@+id/add_assessment_notification_time"
@@ -51,5 +51,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:entries="@array/assessment_type"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/notification_colon"/>
+
+        <Switch
+            android:id="@+id/add_assessment_switch"
+            android:checked="false"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
 
 </LinearLayout>

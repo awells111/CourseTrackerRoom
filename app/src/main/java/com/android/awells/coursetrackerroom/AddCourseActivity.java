@@ -172,7 +172,7 @@ public class AddCourseActivity extends AppCompatActivity implements DatePickerDi
 
         //Insert Course into database
         if (isNewCourse()) {
-            CourseTrackerDatabase.getInstance(getApplicationContext()).course().insert(course);
+            courseId = CourseTrackerDatabase.getInstance(getApplicationContext()).course().insert(course);
         } else {
             CourseTrackerDatabase.getInstance(getApplicationContext()).course().update(course);
         }

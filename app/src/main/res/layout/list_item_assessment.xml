@@ -61,13 +61,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/notification_time_colon"/>
+                android:text="@string/notification_colon"/>
 
             <TextView
                 android:id="@+id/assessment_notification_time_list"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="01/01/1970"/>
+                tools:text="@string/disabled"/>
         </LinearLayout>
 
     </LinearLayout>

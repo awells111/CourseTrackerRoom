@@ -8,13 +8,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -31,17 +32,16 @@ import java.util.Calendar;
 import static com.android.awells.coursetrackerroom.CourseTrackerHelper.getIndex;
 import static com.android.awells.coursetrackerroom.MainActivity.CODE_NO_INPUT;
 import static com.android.awells.coursetrackerroom.date.DatePickerFragment.DATE_PICKER_TAG;
-import static com.android.awells.coursetrackerroom.date.DatePickerFragment.formatMyDate;
 import static com.android.awells.coursetrackerroom.date.DatePickerFragment.formatMyDateTime;
 import static com.android.awells.coursetrackerroom.date.TimePickerFragment.TIME_PICKER_TAG;
 import static com.android.awells.coursetrackerroom.notification.AlarmReceiver.ALARM_RECEIVER_INTENT;
+import static com.android.awells.coursetrackerroom.notification.AlarmReceiver.ALARM_RECEIVER_REQUEST;
 import static com.android.awells.coursetrackerroom.notification.AlarmReceiver.NOTIFICATION_CONTENT_KEY;
 import static com.android.awells.coursetrackerroom.notification.AlarmReceiver.NOTIFICATION_TITLE_KEY;
+import static com.android.awells.coursetrackerroom.notification.AlarmReceiver.cancelAlarm;
 
 public class AddAssessmentActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener,
         TimePickerDialog.OnTimeSetListener {
-
-    public static final String TAG = AddAssessmentActivity.class.getSimpleName();
 
     private Assessment assessment;
     private Course course;
@@ -50,13 +50,13 @@ public class AddAssessmentActivity extends AppCompatActivity implements DatePick
     private long assessmentId;
 
     private long assessmentScheduledDate = Long.MIN_VALUE;
-    private long assessmentNotificationDate = Long.MIN_VALUE;
-    private String datePickerKey = "";
+    private boolean assessmentNotification = false;
 
     private TextView assessmentScheduledView;
     private TextView assessmentNotificationView;
     private EditText assessmentScoreEditText;
     private Spinner assessmentTypeView;
+    private Switch assessmentNotificationSwitch;
 
     private Calendar c;
 
@@ -72,10 +72,11 @@ public class AddAssessmentActivity extends AppCompatActivity implements DatePick
         assessmentNotificationView = findViewById(R.id.add_assessment_notification_time);
         assessmentScoreEditText = findViewById(R.id.add_assessment_score);
         assessmentTypeView = findViewById(R.id.add_assessment_type);
+        assessmentNotificationSwitch = findViewById(R.id.add_assessment_switch);
 
         setOnClickListeners();
         loadData();
-        updateDateDisplay();
+        updateUI();
     }
 
     @Override
@@ -116,17 +117,8 @@ public class AddAssessmentActivity extends AppCompatActivity implements DatePick
         c.set(Calendar.SECOND, 0);
         c.set(Calendar.MILLISECOND, 0);
 
-        if (datePickerKey.equals(getString(R.string.scheduled_time_colon))) {
-            c.set(Calendar.HOUR_OF_DAY, 0);
-            c.set(Calendar.MINUTE, 0);
-            assessmentScheduledDate = c.getTimeInMillis();
-            updateDateDisplay();
-        } else if (datePickerKey.equals(getString(R.string.notification_time_colon))) {
-            TimePickerFragment timePickerFragment = new TimePickerFragment();
-            timePickerFragment.show(getSupportFragmentManager(), TIME_PICKER_TAG);
-        }
-
-        datePickerKey = "";
+        TimePickerFragment timePickerFragment = new TimePickerFragment();
+        timePickerFragment.show(getSupportFragmentManager(), TIME_PICKER_TAG);
     }
 
     @Override
@@ -134,14 +126,9 @@ public class AddAssessmentActivity extends AppCompatActivity implements DatePick
         c.set(Calendar.HOUR_OF_DAY, hourOfDay);
         c.set(Calendar.MINUTE, minute);
 
-        assessmentNotificationDate = c.getTimeInMillis(); //Set notification time
+        assessmentScheduledDate = c.getTimeInMillis(); //Set notification time
 
-        if (assessmentNotificationDate < Calendar.getInstance().getTimeInMillis()) { //If notification time is earlier than now, reset it
-            assessmentNotificationDate = Long.MIN_VALUE;
-        }
-
-        updateDateDisplay();
-        setAlarm();
+        updateUI();
     }
 
     private void loadData() {
@@ -152,9 +139,11 @@ public class AddAssessmentActivity extends AppCompatActivity implements DatePick
 
             assessmentScheduledDate = assessment.getScheduledTime();
 
-            assessmentNotificationDate = assessment.getStartNotification();
+            assessmentNotification = assessment.isStartNotification();
 
-            assessmentScoreEditText.setText(Integer.toString(assessment.getScore()));
+            if (assessment.getScore() >= 0) {
+                assessmentScoreEditText.setText(Integer.toString(assessment.getScore()));
+            }
 
             assessmentTypeView.setSelection(getIndex(assessmentTypeView, assessment.getType()));
         } else {
@@ -163,53 +152,69 @@ public class AddAssessmentActivity extends AppCompatActivity implements DatePick
         }
     }
 
-    private void updateDateDisplay() {
+    private void updateUI() {
         if (assessmentScheduledDate == Long.MIN_VALUE) {
             assessmentScheduledView.setText(R.string.not_set);
         } else {
-            assessmentScheduledView.setText(formatMyDate(assessmentScheduledDate));
+            assessmentScheduledView.setText(formatMyDateTime(assessmentScheduledDate));
         }
 
-        if (assessmentNotificationDate == Long.MIN_VALUE) {
-            assessmentNotificationView.setText(R.string.not_set);
+        if (assessmentScheduledDate < Calendar.getInstance().getTimeInMillis()) {
+            assessmentNotificationView.setText(R.string.disabled);
+            assessmentNotification = false;
+            assessmentNotificationSwitch.setChecked(false);
+            assessmentNotificationSwitch.setEnabled(false);
         } else {
-            assessmentNotificationView.setText(formatMyDateTime(assessmentNotificationDate));
+            assessmentNotificationSwitch.setEnabled(true);
+            if (assessmentNotification) {
+                assessmentNotificationView.setText(R.string.enabled);
+                assessmentNotificationSwitch.setChecked(true);
+            }
         }
+
     }
 
     private void saveItem() {
         // Create assessment from fields
         assessment.setScheduledTime(assessmentScheduledDate);
-        assessment.setStartNotification(assessmentNotificationDate);
-        assessment.setScore(Integer.parseInt(assessmentScoreEditText.getText().toString()));
+        assessment.setStartNotification(assessmentNotification);
         assessment.setType(assessmentTypeView.getSelectedItem().toString());
 
+        if (assessmentScoreEditText.getText().toString().equals("")) {
+            assessment.setScore(-1);
+        } else {
+            assessment.setScore(Integer.parseInt(assessmentScoreEditText.getText().toString()));
+        }
+
         //Insert Assessment into database
-        CourseTrackerDatabase.getInstance(getApplicationContext()).assessment().insert(assessment);
+        if (isNewAssessment()) {
+            assessmentId = CourseTrackerDatabase.getInstance(getApplicationContext()).assessment().insert(assessment);
+        } else {
+            CourseTrackerDatabase.getInstance(getApplicationContext()).assessment().update(assessment);
+        }
+
+        setAlarm();
     }
 
     private void setOnClickListeners() {
         assessmentScheduledView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                datePickerKey = getString(R.string.scheduled_time_colon);
                 DatePickerFragment dialogFragment = new DatePickerFragment();
                 dialogFragment.show(getSupportFragmentManager(), DATE_PICKER_TAG);
             }
         });
 
-        assessmentNotificationView.setOnClickListener(new View.OnClickListener() {
+        assessmentNotificationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View view) {
-                datePickerKey = getString(R.string.notification_time_colon);
-                DatePickerFragment dialogFragment = new DatePickerFragment();
-                dialogFragment.show(getSupportFragmentManager(), DATE_PICKER_TAG);
+            public void onCheckedChanged(CompoundButton assessmentNotificationSwitch, boolean isChecked) {
+                assessmentNotification = isChecked;
+                updateUI();
             }
         });
     }
 
     private boolean isValidData() {
-        //todo isValidData
         return true;
     }
 
@@ -218,17 +223,17 @@ public class AddAssessmentActivity extends AppCompatActivity implements DatePick
     }
 
     private void setAlarm() {
-        if (assessmentNotificationDate > Calendar.getInstance().getTimeInMillis()) { //If the notification date is later than now
-
-            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            Intent intent = new Intent(this, AlarmReceiver.class);
-            intent.putExtra(ALARM_RECEIVER_INTENT, ALARM_RECEIVER_INTENT);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        intent.putExtra(ALARM_RECEIVER_INTENT, ALARM_RECEIVER_INTENT);
+        intent.putExtra(ALARM_RECEIVER_REQUEST, Assessment.ALARM_REQUEST_CODE + assessmentId);
+        if (assessmentNotification) { //Set the alarm
             intent.putExtra(NOTIFICATION_TITLE_KEY, course.getTitle());
             intent.putExtra(NOTIFICATION_CONTENT_KEY, course.getTitle() + " " + getString(R.string.assessment_time_notification));
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-            alarmManager.set(AlarmManager.RTC_WAKEUP, assessmentNotificationDate, pendingIntent);
-        } else { //Else cancel the alarm.
-            //todo cancel alarm
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, (int) (long) (Assessment.ALARM_REQUEST_CODE + assessmentId), intent, 0);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, assessmentScheduledDate, pendingIntent);
+        } else { //Cancel the alarm.
+            cancelAlarm(this, intent);
         }
     }
 }

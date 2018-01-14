@@ -21,6 +21,7 @@ import com.android.awells.coursetrackerroom.data.CourseTrackerDatabase;
 import com.android.awells.coursetrackerroom.data.Note;
 import com.android.awells.coursetrackerroom.data.Term;
 
+import java.util.Calendar;
 import java.util.List;
 
 import static com.android.awells.coursetrackerroom.date.DatePickerFragment.formatMyDate;
@@ -29,7 +30,7 @@ import static com.android.awells.coursetrackerroom.date.DatePickerFragment.forma
 
 public class CourseDetailActivity extends AppCompatActivity {
 
-    private static String TAG = CourseDetailActivity.class.getSimpleName();
+    private static final String TAG = CourseDetailActivity.class.getSimpleName();
 
     private long courseId;
     private long termId;
@@ -44,8 +45,6 @@ public class CourseDetailActivity extends AppCompatActivity {
 
         courseId = getIntent().getLongExtra(Course.COLUMN_ID, CODE_NO_INPUT);
         termId = getIntent().getLongExtra(Term.COLUMN_ID, CODE_NO_INPUT);
-
-        this.setTitle(CourseTrackerDatabase.getInstance(getApplicationContext()).course().selectByCourseId(courseId).getTitle()); //Set the title by retrieving the term
 
         updateUI();
     }
@@ -67,8 +66,8 @@ public class CourseDetailActivity extends AppCompatActivity {
         TextView startDateView = findViewById(R.id.course_start_date_detail);
         TextView endDateView = findViewById(R.id.course_end_date_detail);
 
-        startDateView.setText(formatMyDate(course.getStartDate()));
-        endDateView.setText(formatMyDate(course.getEndDate()));
+        startDateView.setText(formatMyDateTime(course.getStartDate()));
+        endDateView.setText(formatMyDateTime(course.getEndDate()));
 
 
         final RecyclerView assessmentsRecyclerView = findViewById(R.id.assessments_view_course_detail);
@@ -99,7 +98,7 @@ public class CourseDetailActivity extends AppCompatActivity {
             }
         };
     }
-//
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_course_detail, menu);
@@ -229,14 +228,14 @@ public class CourseDetailActivity extends AppCompatActivity {
             if (assessment.getScheduledTime() == Long.MIN_VALUE) { //If assessment is not scheduled
                 holder.scheduledTimeView.setText(notSet);
             } else {
-                holder.scheduledTimeView.setText(formatMyDate(assessment.getScheduledTime()));
+                holder.scheduledTimeView.setText(formatMyDateTime(assessment.getScheduledTime()));
             }
 
-            if (assessment.getStartNotification() == Long.MIN_VALUE) { //If assessment notification is not set
-
-                holder.notificationTimeView.setText(notSet);
+            //If assessment notification is not set OR the notification time is passed, meaning it has already activated
+            if (!assessment.isStartNotification() || assessment.getScheduledTime() < Calendar.getInstance().getTimeInMillis()) {
+                holder.notificationTimeView.setText(mContext.getResources().getString(R.string.disabled));
             } else {
-                holder.notificationTimeView.setText(formatMyDateTime(assessment.getStartNotification()));
+                holder.notificationTimeView.setText(mContext.getResources().getString(R.string.enabled));
             }
         }
 

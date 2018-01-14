@@ -20,7 +20,7 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 public class Assessment {
 
     /** Used to schedule a notification. */
-    public static final int ALARM_REQUEST_CODE = 2000;
+    public static final long ALARM_REQUEST_CODE = 2000;
 
     /** The name of the Assessment table. */
     public static final String TABLE_NAME = "assessments";
@@ -64,9 +64,9 @@ public class Assessment {
     @ColumnInfo(name = COLUMN_SCHEDULED_TIME)
     private long scheduledTime = Long.MIN_VALUE;
 
-    /** The start notification time of the assessment. */
+    /** The start notification of the assessment. */
     @ColumnInfo(name = COLUMN_START_NOTIFICATION)
-    private long startNotification = Long.MIN_VALUE;
+    private boolean startNotification = false;
 
     //<editor-fold defaultstate="collapsed" desc="Getters and Setters">
 
@@ -110,16 +110,15 @@ public class Assessment {
         this.scheduledTime = scheduledTime;
     }
 
-    public long getStartNotification() {
+    public boolean isStartNotification() {
         return startNotification;
     }
 
-    public void setStartNotification(long startNotification) {
+    public void setStartNotification(boolean startNotification) {
         this.startNotification = startNotification;
     }
 
     //</editor-fold>
-    //<editor-fold defaultstate="collapsed" desc="equals hashCode and toString">
 
     @Override
     public String toString() {
@@ -132,32 +131,4 @@ public class Assessment {
                 ", startNotification=" + startNotification +
                 '}';
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Assessment that = (Assessment) o;
-
-        if (getCourseId() != that.getCourseId()) return false;
-        if (getId() != that.getId()) return false;
-        if (getScore() != that.getScore()) return false;
-        if (getScheduledTime() != that.getScheduledTime()) return false;
-        if (getStartNotification() != that.getStartNotification()) return false;
-        return getType() != null ? getType().equals(that.getType()) : that.getType() == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) (getCourseId() ^ (getCourseId() >>> 32));
-        result = 31 * result + (int) (getId() ^ (getId() >>> 32));
-        result = 31 * result + (getType() != null ? getType().hashCode() : 0);
-        result = 31 * result + getScore();
-        result = 31 * result + (int) (getScheduledTime() ^ (getScheduledTime() >>> 32));
-        result = 31 * result + (int) (getStartNotification() ^ (getStartNotification() >>> 32));
-        return result;
-    }
-
-    //</editor-fold>
 }

@@ -85,7 +85,6 @@ public class Note {
     }
 
     //</editor-fold>
-    //<editor-fold defaultstate="collapsed" desc="equals hashCode and toString">
 
     @Override
     public String toString() {
@@ -96,24 +95,4 @@ public class Note {
                 '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Note note = (Note) o;
-
-        if (getCourseId() != note.getCourseId()) return false;
-        if (getId() != note.getId()) return false;
-        return getText() != null ? getText().equals(note.getText()) : note.getText() == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) (getCourseId() ^ (getCourseId() >>> 32));
-        result = 31 * result + (int) (getId() ^ (getId() >>> 32));
-        result = 31 * result + (getText() != null ? getText().hashCode() : 0);
-        return result;
-    }
-//</editor-fold>
 }
